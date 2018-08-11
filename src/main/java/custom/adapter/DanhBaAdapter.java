@@ -3,6 +3,7 @@ package custom.adapter;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,19 +33,28 @@ public class DanhBaAdapter extends ArrayAdapter<DanhBa>{
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater layoutInflater = this.context.getLayoutInflater();
-        View row = layoutInflater.inflate(this.resource,null);
+        ViewHolder viewHolder;
+        if(convertView == null){
+            convertView = LayoutInflater.from(context).inflate(R.layout.danhba_layout,null);
 
-        DanhBa danhBa = this.objects.get(position);
-        TextView txtTen = row.findViewById(R.id.txtTen);
-        TextView txtSDT = row.findViewById(R.id.txtSDT);
+            viewHolder = new ViewHolder();
+            viewHolder.txtTen = convertView.findViewById(R.id.txtTen);
+            viewHolder.txtSDT = convertView.findViewById(R.id.txtSDT);
+            convertView.setTag(viewHolder);
+            Log.d("Position ","position "+(position+1));
+        }else{
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+        DanhBa danhBa = objects.get(position);
+        viewHolder.txtTen.setText(danhBa.getTen());
+        viewHolder.txtSDT.setText(danhBa.getSdt());
 
-        txtTen.setText(danhBa.getTen());
-        txtSDT.setText(danhBa.getSdt());
+        return convertView;
 
+    }
 
-
-
-        return row;
+    public class ViewHolder{
+        TextView txtTen;
+        TextView txtSDT;
     }
 }
